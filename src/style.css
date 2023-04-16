@@ -60,10 +60,15 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 1280px;
+  max-width: 40rem;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  width: calc(100% - 4rem);
+}
+.in-w-disc--wrap {
+  container-type: inline-size;
+  container-name: excerpt;
 }
 
 @media (prefers-color-scheme: light) {
