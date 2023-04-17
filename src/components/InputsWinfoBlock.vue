@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onBeforeMount, computed, getCurrentInstance } from 'vue'
-import { Props } from './InputsWDisclaimerBlock.d'
+import { ref, onBeforeMount, computed } from 'vue'
+// import { Props } from './InputsWinfoBlock.d'
 
 const props = withDefaults(defineProps<{
   id: string,
@@ -8,6 +8,9 @@ const props = withDefaults(defineProps<{
   hLevel?: string,
   swap?: boolean,
   alternate?: boolean,
+  left?: boolean,
+  right?: boolean,
+  alternateRev?: boolean,
   inputPercent?: string,
 }>(), { hLevel: '2', inputPercent: '50' });
 
@@ -33,15 +36,18 @@ onBeforeMount(() => {
 const headID = computed(() : string => `${props.id}--head`);
 const disclaimerID = computed(() => `${props.id}--disclaimer`);
 const wrapClass = computed(() : string => {
-  let output = 'inp-w-disclaim';
+  let output = 'inputs-w-info';
 
-  output += (props.alternate === true)
-    ? ' inp-w-disclaim--alternate'
-    : '';
-
+  if (props.left === true){
+      output += ' inputs-w-info--left';
+  } else if (props.right === true) {
+      output += ' inputs-w-info--right';
+  } else {
     output += (props.swap === true)
-    ? ' inp-w-disclaim--swap'
-    : '';
+      ? ' inputs-w-info--swap'
+      : '';
+  }
+
 
   return output;
 });
@@ -51,20 +57,20 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
 <template>
   <section :class="wrapClass" :id="id" :style="getCSSvar()">
     <header>
-      <h1 v-if="_hLevel === 1" class="inp-w-disclaim__h" :id="headID">{{ heading }}</h1>
-      <h2 v-if="_hLevel === 2" class="inp-w-disclaim__h" :id="headID">{{ heading }}</h2>
-      <h3 v-if="_hLevel === 3" class="inp-w-disclaim__h" :id="headID">{{ heading }}</h3>
-      <h4 v-if="_hLevel === 4" class="inp-w-disclaim__h" :id="headID">{{ heading }}</h4>
-      <h5 v-if="_hLevel === 5" class="inp-w-disclaim__h" :id="headID">{{ heading }}</h5>
-      <h6 v-if="_hLevel === 6" class="inp-w-disclaim__h" :id="headID">{{ heading }}</h6>
+      <h1 v-if="_hLevel === 1" class="inputs-w-info__h" :id="headID">{{ heading }}</h1>
+      <h2 v-if="_hLevel === 2" class="inputs-w-info__h" :id="headID">{{ heading }}</h2>
+      <h3 v-if="_hLevel === 3" class="inputs-w-info__h" :id="headID">{{ heading }}</h3>
+      <h4 v-if="_hLevel === 4" class="inputs-w-info__h" :id="headID">{{ heading }}</h4>
+      <h5 v-if="_hLevel === 5" class="inputs-w-info__h" :id="headID">{{ heading }}</h5>
+      <h6 v-if="_hLevel === 6" class="inputs-w-info__h" :id="headID">{{ heading }}</h6>
     </header>
 
-    <div class="inp-w-disclaim__child inp-w-disclaim__disclaim" :id="disclaimerID">
-      <slot name="disclaimer"></slot>
+    <div class="inputs-w-info__child inputs-w-info__disclaim" :id="disclaimerID">
+      <slot name="info"></slot>
     </div>
 
-    <div class="inp-w-disclaim__child inp-w-disclaim__inputs">
-      <slot name="ïnputs"></slot>
+    <div class="inputs-w-info__child inputs-w-info__inputs">
+      <slot name="inputs"></slot>
     </div>
   </section>
 </template>
@@ -73,7 +79,7 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
 .read-the-docs {
   color: #888;
 }
-.inp-w-disclaim {
+.inputs-w-info {
   box-sizing: border-box;
   column-gap: 2rem;
   display: flex;
@@ -86,12 +92,12 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
   row-gap: 1rem;
   text-align: left;
 }
-.inp-w-disclaim > header {
+.inputs-w-info > header {
   grid-area: head;
   position: relative;
   text-align: center;
 }
-.inp-w-disclaim > header::before {
+.inputs-w-info > header::before {
   border-top: 0.1rem solid #fff;
   content: '';
   display: block;
@@ -101,7 +107,7 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
   top: 55%;
   width: 100%;
 }
-.inp-w-disclaim__h {
+.inputs-w-info__h {
   background-color: #242424;
   display: inline-block;
   margin: 0;
@@ -109,64 +115,76 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
   position: relative;
   z-index: 1;
 }
-.inp-w-disclaim__child {
+.inputs-w-info__child {
   border: 0.05rem solid #fff;
   padding: 1.5rem;
 }
-.inp-w-disclaim__disclaim {
+.inputs-w-info__disclaim {
   grid-area: disclaimer;
 }
-.inp-w-disclaim__child :first-child {
+.inputs-w-info__child :first-child {
   margin-top: 0;
 }
-.inp-w-disclaim__inputs {
+.inputs-w-info__inputs {
   grid-area: inputs;
 }
 
 @media screen and (max-width: 47.999999rem) {
-  .inp-w-disclaim {
+  .inputs-w-info {
     display: flex;
     flex-direction: column;
   }
 }
 
 @media screen and (min-width: 48rem) {
-  .inp-w-disclaim {
+  .inputs-w-info {
     display: grid;
     grid-template-areas: "head head"
                         "disclaimer inputs";
+    grid-template-columns: 50% 50%;
+    grid-template-columns: var(--input-percent) auto;
   }
-  .inp-w-disclaim--alternate:nth-of-type(odd),
-  .inp-w-disclaim--alternate.inp-w-disclaim--swap:nth-of-type(even) {
+
+  .inputs-w-info--swap,
+  .inputs-w-info--alternate > .inputs-w-info:nth-of-type(even),
+  .inputs-w-info--alternate > .inputs-w-info--swap:nth-of-type(odd),
+  .inputs-w-info--alternate--rev > .inputs-w-info:nth-of-type(odd),
+  .inputs-w-info--alternate--rev > .inputs-w-info--swap:nth-of-type(even) {
+    grid-template-areas: "head head"
+                        "inputs disclaimer";
+  }
+  .inputs-w-info--alternate > .inputs-w-info:nth-of-type(odd),
+  .inputs-w-info--alternate >  .inputs-w-info--swap:nth-of-type(even),
+  .inputs-w-info--alternate--rev > .inputs-w-info:nth-of-type(even),
+  .inputs-w-info--alternate--rev > .inputs-w-info--swap:nth-of-type(odd) {
     grid-template-areas: "head head"
                         "disclaimer inputs";
   }
-
-  .inp-w-disclaim--swap,
-  .inp-w-disclaim--alternate:nth-of-type(even),
-  .inp-w-disclaim--alternate.inp-w-disclaim--swap:nth-of-type(odd) {
+  .inputs-w-info--left {
     grid-template-areas: "head head"
-                        "inputs disclaimer";
-    grid-template-columns: 50% 50%;
-    grid-template-columns: var(--input-percent) auto;
+                         "inputs disclaimer" !important;
+  }
+  .inputs-w-info--right {
+    grid-template-areas: "head head"
+                         "disclaimer inputs" !important;
   }
 }
 
 /* @container (min-width: 40rem) {
-  .inp-w-disclaim {
+  .inputs-w-info {
     display: grid;
     grid-template-areas: "head head"
                         "disclaimer inputs";
   }
-  .inp-w-disclaim--alternate:nth-of-type(odd),
-  .inp-w-disclaim--alternate.inp-w-disclaim--swap:nth-of-type(even) {
+  .inputs-w-info--alternate:nth-of-type(odd),
+  .inputs-w-info--alternate.inputs-w-info--swap:nth-of-type(even) {
     grid-template-areas: "head head"
                         "disclaimer inputs";
   }
 
-  .inp-w-disclaim--swap,
-  .inp-w-disclaim--alternate:nth-of-type(even),
-  .inp-w-disclaim--alternate.inp-w-disclaim--swap:nth-of-type(odd) {
+  .inputs-w-info--swap,
+  .inputs-w-info--alternate:nth-of-type(even),
+  .inputs-w-info--alternate.inputs-w-info--swap:nth-of-type(odd) {
     grid-template-areas: "head head"
                         "inputs disclaimer";
     grid-template-columns: var(--input-percent) auto;

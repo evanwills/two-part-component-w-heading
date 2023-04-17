@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import InputsWDisclaimerBlock from './components/InputsWDisclaimerBlock.vue'
+import InputsWinfoBlock from './components/InputsWinfoBlock.vue'
 </script>
 
 <template>
-  <div class="in-w-disc--wrap">
-    <InputsWDisclaimerBlock id="in-w-disc1" heading="Transportation">
-      <template #disclaimer>
+  <div class="in-w-disc--wrap inputs-w-info--alternate">
+    <InputsWinfoBlock id="in-w-disc1" heading="Transportation">
+      <template #info>
         <h4>Transport preferences</h4>
         <p>We are asking for information about your preferred mode(s) of transport.</p>
         <p>We are collecting this information to help us provide the right sort of bicycle for you.</p>
       </template>
-      <template #ïnputs>
+      <template #inputs>
         <p>
           <label for="transport-type">Preferred Transport type:</label>
           <select id="transport-type">
@@ -34,14 +34,14 @@ import InputsWDisclaimerBlock from './components/InputsWDisclaimerBlock.vue'
           <input type="number" id="distance" step="0.1" min="0" max="0" />
         </p>
       </template>
-    </InputsWDisclaimerBlock>
-    <InputsWDisclaimerBlock id="in-w-disc2" heading="Transportation">
-      <template #disclaimer>
+    </InputsWinfoBlock>
+    <InputsWinfoBlock id="in-w-disc2" heading="Transportation">
+      <template #info>
         <h4>Transport preferences</h4>
         <p>We are asking for information about your preferred mode(s) of transport.</p>
         <p>We are collecting this information to help us provide the right sort of bicycle for you.</p>
       </template>
-      <template #ïnputs>
+      <template #inputs>
         <p>
           <label for="transport-type">Preferred Transport type:</label>
           <select id="transport-type">
@@ -65,7 +65,7 @@ import InputsWDisclaimerBlock from './components/InputsWDisclaimerBlock.vue'
           <input type="number" id="distance" step="0.1" min="0" max="0" />
         </p>
       </template>
-    </InputsWDisclaimerBlock>
+    </InputsWinfoBlock>
   </div>
 </template>
 
