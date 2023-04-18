@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<{
 }>(), { hLevel: '2', inputPercent: '50' });
 
 let _hLevel = 2;
-let _colWidthInput = 50;
+let _colWidthInput = 1;
 
 onBeforeMount(() => {
   const level = parseInt(props.hLevel);
@@ -27,9 +27,11 @@ onBeforeMount(() => {
 
   const percent = parseFloat(props.inputPercent);
   if (isNaN(percent) || percent < 10 || percent > 90) {
-    throw new Error('inputPercent attribute must be unfdefined or a number between 10 and 90 inclusive')
+    throw new Error('inputPercent attribute must be unfdefined or a number between 10 and 90 inclusive. "' + props.inputPercent + '"')
   } else {
-    _colWidthInput = percent;
+    _colWidthInput = Math.round(((percent * 2) / 100) * 1000) / 1000;
+    console.log('props.inputPercent:', props.inputPercent)
+    console.log('_colWidthInput:', _colWidthInput)
   }
 });
 
@@ -51,7 +53,10 @@ const wrapClass = computed(() : string => {
 
   return output;
 });
-const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
+const getCSSvar = () : string => {
+  const alt = Math.round((2 - _colWidthInput) * 1000) / 1000;
+  return `--input-fr: ${_colWidthInput}fr; --info-fr: ${alt}fr;`;
+}
 </script>
 
 <template>
@@ -85,12 +90,13 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
   display: flex;
   flex-direction: column;
   grid-template-columns: 50% 50%;
-  grid-template-columns: auto var(--input-percent);
+  grid-template-columns: var(--info-fr) var(--input-fr);
   grid-template-areas: "head head"
                        "disclaimer inputs";
   margin-bottom: 2rem;
   row-gap: 1rem;
   text-align: left;
+  width: 100%;
 }
 .inputs-w-info > header {
   grid-area: head;
@@ -142,7 +148,7 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
     grid-template-areas: "head head"
                         "disclaimer inputs";
     grid-template-columns: 50% 50%;
-    grid-template-columns: var(--input-percent) auto;
+    grid-template-columns: var(--info-fr) var(--input-fr);
   }
 
   .inputs-w-info--swap,
@@ -152,6 +158,8 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
   .inputs-w-info--alternate--rev > .inputs-w-info--swap:nth-of-type(even) {
     grid-template-areas: "head head"
                         "inputs disclaimer";
+    grid-template-columns: 50% 50%;
+    grid-template-columns: var(--input-fr) var(--info-fr);
   }
   .inputs-w-info--alternate > .inputs-w-info:nth-of-type(odd),
   .inputs-w-info--alternate >  .inputs-w-info--swap:nth-of-type(even),
@@ -187,7 +195,7 @@ const getCSSvar = () : string => `--input-percent: ${_colWidthInput}%;`;
   .inputs-w-info--alternate.inputs-w-info--swap:nth-of-type(odd) {
     grid-template-areas: "head head"
                         "inputs disclaimer";
-    grid-template-columns: var(--input-percent) auto;
+    grid-template-columns: var(--input-fr) auto;
   }
 } */
 </style>
