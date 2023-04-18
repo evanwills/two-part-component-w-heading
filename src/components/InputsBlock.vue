@@ -192,6 +192,11 @@ onMounted(() => {
 .inputs-block__content {
   transition: transform ease-in-out 0.3s;
 }
+@media (prefers-reduced-motion) {
+  .inputs-block__content {
+    transition: none;
+  }
+}
 .inputs-block__content--viewing {
   transform: translateX(0);
 }
@@ -226,8 +231,8 @@ onMounted(() => {
 .inputs-block__content-wrap {
   height: var(--values-height);
   position: relative;
-
 }
+
 .inputs-block__content--slide {
   position: absolute;
   top: 0;
